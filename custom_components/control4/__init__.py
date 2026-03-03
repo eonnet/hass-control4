@@ -451,7 +451,7 @@ class Control4Entity(Entity):
             for key, value in data.items():
                 if isinstance(value, dict):
                     for k, val in value.items():
-                        self._extra_state_attributes[k] = val
+                        self._extra_state_attributes[k.upper()] = val
                 else:
                     self._extra_state_attributes[key.upper()] = value
 
