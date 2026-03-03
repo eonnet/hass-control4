@@ -204,6 +204,7 @@ class Control4Climate(Control4Entity, ClimateEntity):  # type: ignore[misc]
         else:
             self._thermostat_setup = {}
         self._aux_heat_active = False
+        self._attr_should_poll = True
 
     def create_api_object(self):
         """Create a pyControl4 device object.
@@ -496,3 +497,8 @@ class Control4Climate(Control4Entity, ClimateEntity):  # type: ignore[misc]
         self._aux_heat_active = False
         if self.hvac_mode == HVACMode.HEAT:
             await self.async_set_hvac_mode(HVACMode.HEAT)
+    async def async_update(self) -> None:
+        """Poll Control4 for updated thermostat variables."""
+        self._extra_state_attributes = await director_get_entry_variables(
+            self.hass, self.entry, self._idx
+        )
